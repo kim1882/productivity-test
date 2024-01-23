@@ -40,11 +40,19 @@ export const tasksSlice = createSlice({
         return { ...currentTask, isActive: false };
       });
     },
-    stop: (state, action: PayloadAction<{ taskId: string }>) => {
-      const { taskId } = action.payload;
+    stop: (
+      state,
+      action: PayloadAction<{ taskId: string; elapsedMillis: number }>
+    ) => {
+      const { taskId, elapsedMillis } = action.payload;
       state.tasks = state.tasks.map((currentTask) => {
-        if (currentTask.id === taskId)
-          return { ...currentTask, isActive: false };
+        if (currentTask.id === taskId) {
+          return {
+            ...currentTask,
+            isActive: false,
+            elapsedTimeInMilliseconds: elapsedMillis,
+          };
+        }
         return currentTask;
       });
     },

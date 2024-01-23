@@ -20,7 +20,7 @@ interface ITaskItem {
   onUpdate: (modifiedTask: Task) => void;
   onDelete: (taskId: string) => void;
   onStart: (taskId: string) => void;
-  onStop: (taskId: string) => void;
+  onStop: (taskId: string, elapsedMillis: number) => void;
 }
 
 const TaskItem = ({ task, onUpdate, onDelete, onStart, onStop }: ITaskItem) => {
@@ -44,7 +44,7 @@ const TaskItem = ({ task, onUpdate, onDelete, onStart, onStop }: ITaskItem) => {
     if (key === "isCompleted" && value === true) {
       // Stop if task is active
       if (isActive) {
-        onStop(id);
+        onStop(id, elapsedTime);
       }
     }
   };
@@ -58,10 +58,11 @@ const TaskItem = ({ task, onUpdate, onDelete, onStart, onStop }: ITaskItem) => {
     if (startTime) {
       const endTime = new Date();
       const elapsedMillis = endTime.getTime() - startTime.getTime();
-      setElapsedTime(
-        (initialElapsedMillis) => initialElapsedMillis + elapsedMillis
-      );
-      onStop(id);
+      setElapsedTime((initialElapsedMillis) => {
+        const newElapsed = initialElapsedMillis + elapsedMillis;
+        onStop(id, newElapsed);
+        return newElapsed;
+      });
     }
   };
 

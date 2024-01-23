@@ -71,8 +71,8 @@ const TaskList = () => {
     dispatch(start({ taskId }));
   };
 
-  const stopTask = (taskId: string) => {
-    dispatch(stop({ taskId }));
+  const stopTask = (taskId: string, elapsedMillis: number) => {
+    dispatch(stop({ taskId, elapsedMillis }));
   };
 
   return (
