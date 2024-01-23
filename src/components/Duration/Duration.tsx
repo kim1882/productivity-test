@@ -3,6 +3,7 @@ import {
   formatToHoursMinutes,
   formatToHoursMinutesSeconds,
   minutesToMillis,
+  getCategoryAttributes,
 } from "@/utils";
 import {
   Category,
@@ -14,7 +15,6 @@ import {
   Timer,
   Error,
 } from "./Duration.styles";
-import { CategoryLabel } from "@/constants";
 import { Edit as EditIcon } from "@mui/icons-material";
 import { useState } from "react";
 import { Button, Dialog, DialogContent, DialogTitle } from "@mui/material";
@@ -72,7 +72,7 @@ const Duration = ({
         <Category
           size="small"
           duration={totalTime}
-          label={CategoryLabel[totalTime] || "Custom"}
+          label={getCategoryAttributes(totalTime).label}
         />
       </Container>
       <Dialog open={showEditModal} onClose={() => setShowEditModal(false)}>

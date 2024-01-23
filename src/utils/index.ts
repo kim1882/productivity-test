@@ -1,6 +1,7 @@
 import { Duration, Task } from "@/types/tasks";
 import { v4 as uuidv4 } from "uuid";
 import moment from "moment";
+import { CategoryAttributes } from "@/constants";
 
 const generateRandomTask = () => {
   // Creation date within the last 7 days
@@ -72,4 +73,14 @@ export const millisToMinutes = (milliseconds: number): number => {
 export const minutesToMillis = (minutes: number): number => {
   const millisecondsInMinute = 60 * 1000;
   return minutes * millisecondsInMinute;
+};
+
+export const getCategoryAttributes = (totalDuration: number) => {
+  if (totalDuration <= Duration.Short) {
+    return CategoryAttributes[Duration.Short];
+  } else if (totalDuration > Duration.Short && totalDuration < Duration.Long) {
+    return CategoryAttributes[Duration.Medium];
+  } else {
+    return CategoryAttributes[Duration.Long];
+  }
 };

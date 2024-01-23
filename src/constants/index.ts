@@ -1,17 +1,23 @@
 import { Duration } from "@/types/tasks";
 
 interface ICategoryMap {
-  [key: number]: string;
+  [key: number]: {
+    label: string;
+    color: string;
+  };
 }
 
-export const CategoryLabel: ICategoryMap = {
-  [Duration.Short]: "Short",
-  [Duration.Medium]: "Medium",
-  [Duration.Long]: "Long",
-};
-
-export const CategoryColor: ICategoryMap = {
-  [Duration.Short]: "#2431E3",
-  [Duration.Medium]: "#24AAE3",
-  [Duration.Long]: "#921CE6",
+export const CategoryAttributes: ICategoryMap = {
+  [Duration.Short]: {
+    label: "Short",
+    color: "#2431E3",
+  },
+  [Duration.Medium]: {
+    label: "Medium",
+    color: "#24AAE3",
+  },
+  [Duration.Long]: {
+    label: "Long",
+    color: "#921CE6",
+  },
 };
