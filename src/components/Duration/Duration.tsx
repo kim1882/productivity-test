@@ -12,11 +12,14 @@ import {
   ModalActions,
   Time,
   Timer,
+  Error,
 } from "./Duration.styles";
 import { CategoryLabel } from "@/constants";
 import { Edit as EditIcon } from "@mui/icons-material";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Button, Dialog, DialogContent, DialogTitle } from "@mui/material";
+
+const MAX_DURATION_MINUTES = 120;
 
 interface IDuration {
   isActive: boolean;
@@ -37,8 +40,10 @@ const Duration = ({
   );
 
   const onSave = () => {
-    onUpdateDuration(minutesToMillis(durationInMinutes));
-    setShowEditModal(false);
+    if (durationInMinutes <= MAX_DURATION_MINUTES) {
+      onUpdateDuration(minutesToMillis(durationInMinutes));
+      setShowEditModal(false);
+    }
   };
 
   return (
@@ -77,6 +82,9 @@ const Duration = ({
             }
             fullWidth
           />
+          {durationInMinutes > MAX_DURATION_MINUTES && (
+            <Error>Max task duration is 120 minutes</Error>
+          )}
           <ModalActions>
             <Button
               variant="outlined"

@@ -66,3 +66,8 @@ export const ModalActions = styled.div`
   margin-top: 16px;
   justify-content: space-between;
 `;
+
+export const Error = styled.div`
+  color: red;
+  font-size: 10px;
+`;
