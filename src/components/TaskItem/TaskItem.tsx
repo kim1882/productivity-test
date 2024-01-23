@@ -3,6 +3,7 @@ import {
   DeleteOutline as DeleteIcon,
   PlayArrow as StartIcon,
   Stop as StopIcon,
+  RestartAlt as ResetIcon,
 } from "@mui/icons-material";
 import {
   Action,
@@ -66,6 +67,11 @@ const TaskItem = ({ task, onUpdate, onDelete, onStart, onStop }: ITaskItem) => {
     }
   };
 
+  const reset = () => {
+    updateTask("elapsedTimeInMilliseconds", 0);
+    setElapsedTime(0);
+  };
+
   useEffect(() => {
     if (startTime && isActive) {
       timer = setInterval(() => {
@@ -119,6 +125,9 @@ const TaskItem = ({ task, onUpdate, onDelete, onStart, onStop }: ITaskItem) => {
         />
       </Details>
       <Menu>
+        <Action disabled={isCompleted} onClick={reset}>
+          <ResetIcon />
+        </Action>
         {isActive ? (
           <Action onClick={stop}>
             <StopIcon />
