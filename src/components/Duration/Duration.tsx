@@ -23,6 +23,7 @@ const MAX_DURATION_MINUTES = 120;
 
 interface IDuration {
   isActive: boolean;
+  isCompleted: boolean;
   elapsedTime: number;
   totalTime: number;
   onUpdateDuration: (newDurationInMillis: number) => void;
@@ -30,6 +31,7 @@ interface IDuration {
 
 const Duration = ({
   isActive,
+  isCompleted,
   elapsedTime,
   totalTime,
   onUpdateDuration,
@@ -57,12 +59,14 @@ const Duration = ({
             {`${formatToHoursMinutes(elapsedTime)}/${formatToHoursMinutes(
               totalTime
             )}`}
-            <EditDuration
-              className="edit-icon"
-              onClick={() => setShowEditModal(true)}
-            >
-              <EditIcon />
-            </EditDuration>
+            {!isCompleted && (
+              <EditDuration
+                className="edit-icon"
+                onClick={() => setShowEditModal(true)}
+              >
+                <EditIcon />
+              </EditDuration>
+            )}
           </Time>
         )}
         <Category

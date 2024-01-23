@@ -109,8 +109,8 @@ const TaskItem = ({ task, onUpdate, onDelete, onStart, onStop }: ITaskItem) => {
           isCompleted={isCompleted}
         />
         <Duration
-          // elapsedTime={elapsedTimeInMilliseconds}
           isActive={isActive}
+          isCompleted={isCompleted}
           elapsedTime={elapsedTime}
           totalTime={durationInMilliseconds}
           onUpdateDuration={(newDurationInMillis: number) =>
@@ -124,7 +124,7 @@ const TaskItem = ({ task, onUpdate, onDelete, onStart, onStop }: ITaskItem) => {
             <StopIcon />
           </Action>
         ) : (
-          <Action onClick={start}>
+          <Action disabled={isCompleted} onClick={start}>
             <StartIcon />
           </Action>
         )}
