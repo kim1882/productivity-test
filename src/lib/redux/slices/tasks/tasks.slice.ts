@@ -32,12 +32,28 @@ export const tasksSlice = createSlice({
       const numberOfTasks = action.payload;
       state.tasks = generateTasks(numberOfTasks);
     },
+    start: (state, action: PayloadAction<{ taskId: string }>) => {
+      const { taskId } = action.payload;
+      state.tasks = state.tasks.map((currentTask) => {
+        if (currentTask.id === taskId)
+          return { ...currentTask, isActive: true };
+        return { ...currentTask, isActive: false };
+      });
+    },
+    stop: (state, action: PayloadAction<{ taskId: string }>) => {
+      const { taskId } = action.payload;
+      state.tasks = state.tasks.map((currentTask) => {
+        if (currentTask.id === taskId)
+          return { ...currentTask, isActive: false };
+        return currentTask;
+      });
+    },
   },
 });
 
 const { actions } = tasksSlice;
 
-export const { add, remove, update, preload } = actions;
+export const { add, remove, update, preload, start, stop } = actions;
 
 /* Types */
 export interface TasksSliceState {

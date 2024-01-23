@@ -16,11 +16,19 @@ export const EditDuration = styled(IconButton)`
   padding: 4px;
 `;
 
+export const Timer = styled.div`
+  color: black;
+  font-weight: bold;
+  font-size: 14px;
+  margin-right: 40px;
+`;
+
 export const Time = styled.div`
   display: flex;
   color: darkgray;
   font-size: 12px;
   align-items: center;
+  justify-content: center;
 
   &:hover {
     .edit-icon {

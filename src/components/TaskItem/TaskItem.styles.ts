@@ -1,17 +1,25 @@
 import styled from "@emotion/styled";
+import { css } from "@emotion/react";
 import { Checkbox, IconButton, TextField } from "@mui/material";
 
-export const Item = styled.div`
+export const Item = styled.div<{ isActive: boolean }>`
   display: flex;
   padding: 0 60px;
   height: auto;
   width: 100%;
   align-items: center;
   justify-content: space-between;
+  border-radius: 8px;
 
   "&:hover": {
     background-color: lightblue;
   }
+
+  ${({ isActive }) =>
+    isActive &&
+    css`
+      background-color: lightblue;
+    `}
 `;
 
 export const Details = styled.div`
@@ -57,7 +65,7 @@ export const Menu = styled.div`
   width: min-content;
 `;
 
-export const DeleteTask = styled(IconButton)`
+export const Action = styled(IconButton)`
   color: #72a0c1;
   cursor: pointer;
   padding: 8px;

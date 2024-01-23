@@ -11,6 +11,8 @@ import {
   useDispatch,
   useSelector,
   add,
+  start,
+  stop,
 } from "@/lib/redux";
 import { Duration, Task } from "@/types/tasks";
 import {
@@ -32,8 +34,11 @@ const TaskList = () => {
   const byCreationDate = (taskA: Task, taskB: Task) =>
     taskB.creationDate - taskA.creationDate;
 
-  const sortedByDateTasks = useMemo(() => {
-    const orderedItems = [...tasks].sort(byCreationDate);
+  const byIsActive = (taskA: Task, taskB: Task) =>
+    taskA.isActive === taskB.isActive ? 0 : taskA.isActive ? -1 : 1;
+
+  const sortedTasks = useMemo(() => {
+    const orderedItems = [...tasks].sort(byCreationDate).sort(byIsActive);
     return orderedItems;
   }, [tasks]);
 
@@ -46,6 +51,7 @@ const TaskList = () => {
       id: uuidv4(),
       description: "",
       isCompleted: false,
+      isActive: false,
       creationDate: new Date().getTime(),
       durationInMilliseconds: Duration.Short,
       elapsedTimeInMilliseconds: 0,
@@ -61,6 +67,14 @@ const TaskList = () => {
     dispatch(remove({ taskId }));
   };
 
+  const startTask = (taskId: string) => {
+    dispatch(start({ taskId }));
+  };
+
+  const stopTask = (taskId: string) => {
+    dispatch(stop({ taskId }));
+  };
+
   return (
     <>
       <Actions>
@@ -74,14 +88,16 @@ const TaskList = () => {
         </ActionButton>
       </Actions>
       <Content>
-        {sortedByDateTasks.length ? (
+        {sortedTasks.length ? (
           <List>
-            {sortedByDateTasks.map((task) => (
+            {sortedTasks.map((task) => (
               <TaskItem
                 key={task.id}
                 task={task}
                 onUpdate={updateTask}
                 onDelete={deleteTask}
+                onStart={startTask}
+                onStop={stopTask}
               />
             ))}
           </List>

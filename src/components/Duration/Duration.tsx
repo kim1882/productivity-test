@@ -1,6 +1,7 @@
 import {
   millisToMinutes,
   formatToHoursMinutes,
+  formatToHoursMinutesSeconds,
   minutesToMillis,
 } from "@/utils";
 import {
@@ -10,19 +11,26 @@ import {
   EditDuration,
   ModalActions,
   Time,
+  Timer,
 } from "./Duration.styles";
 import { CategoryLabel } from "@/constants";
 import { Edit as EditIcon } from "@mui/icons-material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button, Dialog, DialogContent, DialogTitle } from "@mui/material";
 
 interface IDuration {
+  isActive: boolean;
   elapsedTime: number;
   totalTime: number;
   onUpdateDuration: (newDurationInMillis: number) => void;
 }
 
-const Duration = ({ elapsedTime, totalTime, onUpdateDuration }: IDuration) => {
+const Duration = ({
+  isActive,
+  elapsedTime,
+  totalTime,
+  onUpdateDuration,
+}: IDuration) => {
   const [showEditModal, setShowEditModal] = useState(false);
   const [durationInMinutes, setDurationInMinutes] = useState(
     millisToMinutes(totalTime)
@@ -35,18 +43,23 @@ const Duration = ({ elapsedTime, totalTime, onUpdateDuration }: IDuration) => {
 
   return (
     <>
+      {isActive && <Timer>{formatToHoursMinutesSeconds(elapsedTime)}</Timer>}
       <Container>
-        <Time>
-          {`${formatToHoursMinutes(elapsedTime)}/${formatToHoursMinutes(
-            totalTime
-          )}`}
-          <EditDuration
-            className="edit-icon"
-            onClick={() => setShowEditModal(true)}
-          >
-            <EditIcon />
-          </EditDuration>
-        </Time>
+        {isActive ? (
+          <Time>{formatToHoursMinutes(totalTime)}</Time>
+        ) : (
+          <Time>
+            {`${formatToHoursMinutes(elapsedTime)}/${formatToHoursMinutes(
+              totalTime
+            )}`}
+            <EditDuration
+              className="edit-icon"
+              onClick={() => setShowEditModal(true)}
+            >
+              <EditIcon />
+            </EditDuration>
+          </Time>
+        )}
         <Category
           size="small"
           duration={totalTime}

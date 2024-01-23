@@ -1,7 +1,11 @@
 import { Task } from "@/types/tasks";
-import { DeleteOutline as DeleteIcon } from "@mui/icons-material";
 import {
-  DeleteTask,
+  DeleteOutline as DeleteIcon,
+  PlayArrow as StartIcon,
+  Stop as StopIcon,
+} from "@mui/icons-material";
+import {
+  Action,
   Description,
   Details,
   Item,
@@ -9,29 +13,81 @@ import {
   Status,
 } from "./TaskItem.styles";
 import Duration from "../Duration";
+import { useEffect, useState } from "react";
 
 interface ITaskItem {
   task: Task;
   onUpdate: (modifiedTask: Task) => void;
   onDelete: (taskId: string) => void;
+  onStart: (taskId: string) => void;
+  onStop: (taskId: string) => void;
 }
 
-const TaskItem = ({ task, onUpdate, onDelete }: ITaskItem) => {
+const TaskItem = ({ task, onUpdate, onDelete, onStart, onStop }: ITaskItem) => {
+  let timer: NodeJS.Timeout;
   const {
     id,
+    isActive,
     description,
     isCompleted,
     durationInMilliseconds,
     elapsedTimeInMilliseconds,
   } = task;
+  const [startTime, setStartTime] = useState<Date | null>(null);
+  const [elapsedTime, setElapsedTime] = useState(elapsedTimeInMilliseconds);
 
   const updateTask = (key: string, value: string | boolean | number) => {
     const modifiedTask = { ...task, [key]: value };
     onUpdate(modifiedTask);
+
+    // When marking task as completed
+    if (key === "isCompleted" && value === true) {
+      // Stop if task is active
+      if (isActive) {
+        onStop(id);
+      }
+    }
   };
 
+  const start = () => {
+    setStartTime(new Date());
+    onStart(id);
+  };
+
+  const stop = () => {
+    if (startTime) {
+      const endTime = new Date();
+      const elapsedMillis = endTime.getTime() - startTime.getTime();
+      setElapsedTime(
+        (initialElapsedMillis) => initialElapsedMillis + elapsedMillis
+      );
+      onStop(id);
+    }
+  };
+
+  useEffect(() => {
+    if (startTime && isActive) {
+      timer = setInterval(() => {
+        setElapsedTime((initialElapsedMillis) => initialElapsedMillis + 1000);
+      }, 1000);
+    } else {
+      clearInterval(timer);
+    }
+
+    return () => clearInterval(timer);
+  }, [isActive, startTime]);
+
+  useEffect(() => {
+    if (!isActive) {
+      setElapsedTime(elapsedTimeInMilliseconds);
+    }
+
+    // Clean up when the component is unmounted
+    return () => clearInterval(timer);
+  }, []);
+
   return (
-    <Item>
+    <Item isActive={isActive}>
       <Details>
         <Status
           disabled={description.length === 0}
@@ -52,7 +108,9 @@ const TaskItem = ({ task, onUpdate, onDelete }: ITaskItem) => {
           isCompleted={isCompleted}
         />
         <Duration
-          elapsedTime={elapsedTimeInMilliseconds}
+          // elapsedTime={elapsedTimeInMilliseconds}
+          isActive={isActive}
+          elapsedTime={elapsedTime}
           totalTime={durationInMilliseconds}
           onUpdateDuration={(newDurationInMillis: number) =>
             updateTask("durationInMilliseconds", newDurationInMillis)
@@ -60,9 +118,18 @@ const TaskItem = ({ task, onUpdate, onDelete }: ITaskItem) => {
         />
       </Details>
       <Menu>
-        <DeleteTask onClick={() => onDelete(id)}>
+        {isActive ? (
+          <Action onClick={stop}>
+            <StopIcon />
+          </Action>
+        ) : (
+          <Action onClick={start}>
+            <StartIcon />
+          </Action>
+        )}
+        <Action onClick={() => onDelete(id)}>
           <DeleteIcon />
-        </DeleteTask>
+        </Action>
       </Menu>
     </Item>
   );

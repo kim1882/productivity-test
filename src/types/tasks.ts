@@ -5,6 +5,7 @@ export enum Duration {
 }
 export interface Task {
   id: string;
+  isActive: boolean;
   description: string;
   isCompleted: boolean;
   creationDate: number;
