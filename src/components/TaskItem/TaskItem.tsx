@@ -8,6 +8,7 @@ import {
   Menu,
   Status,
 } from "./TaskItem.styles";
+import Duration from "../Duration";
 
 interface ITaskItem {
   task: Task;
@@ -16,8 +17,13 @@ interface ITaskItem {
 }
 
 const TaskItem = ({ task, onUpdate, onDelete }: ITaskItem) => {
-  const { id, description, isCompleted, creationDate, durationInMilliseconds } =
-    task;
+  const {
+    id,
+    description,
+    isCompleted,
+    durationInMilliseconds,
+    elapsedTimeInMilliseconds,
+  } = task;
 
   const updateTask = (key: string, value: string | boolean | number) => {
     const modifiedTask = { ...task, [key]: value };
@@ -44,6 +50,13 @@ const TaskItem = ({ task, onUpdate, onDelete }: ITaskItem) => {
           onBlur={({ target: { value } }) => updateTask("description", value)}
           length={description.length}
           isCompleted={isCompleted}
+        />
+        <Duration
+          elapsedTime={elapsedTimeInMilliseconds}
+          totalTime={durationInMilliseconds}
+          onUpdateDuration={(newDurationInMillis: number) =>
+            updateTask("durationInMilliseconds", newDurationInMillis)
+          }
         />
       </Details>
       <Menu>

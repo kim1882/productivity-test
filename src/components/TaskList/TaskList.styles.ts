@@ -22,7 +22,6 @@ export const List = styled.ul`
   display: flex;
   flex-direction: column;
   gap: 8px;
-  width: 80%;
   margin: auto;
   overflow-y: auto;
   max-height: 70vh;

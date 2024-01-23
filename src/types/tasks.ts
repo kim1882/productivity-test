@@ -9,4 +9,5 @@ export interface Task {
   isCompleted: boolean;
   creationDate: number;
   durationInMilliseconds: Duration | number;
+  elapsedTimeInMilliseconds: number;
 }

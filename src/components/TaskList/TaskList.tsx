@@ -23,14 +23,14 @@ import {
 import TaskItem from "../TaskItem";
 import { v4 as uuidv4 } from "uuid";
 
-const NUMBER_OF_TASKS = 3;
+const NUMBER_OF_TASKS = 50;
 
 const TaskList = () => {
   const dispatch = useDispatch();
   const tasks: Task[] = useSelector(selectTasks);
 
   const byCreationDate = (taskA: Task, taskB: Task) =>
-    taskA.creationDate - taskB.creationDate;
+    taskB.creationDate - taskA.creationDate;
 
   const sortedByDateTasks = useMemo(() => {
     const orderedItems = [...tasks].sort(byCreationDate);
@@ -48,6 +48,7 @@ const TaskList = () => {
       isCompleted: false,
       creationDate: new Date().getTime(),
       durationInMilliseconds: Duration.Short,
+      elapsedTimeInMilliseconds: 0,
     };
     dispatch(add({ newTask }));
   };

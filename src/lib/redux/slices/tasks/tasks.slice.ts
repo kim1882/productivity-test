@@ -1,7 +1,7 @@
 /* Core */
 import { Task } from "@/types/tasks";
+import { generateTasks } from "@/utils";
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import { generateTasks } from "./utils";
 
 const initialState: TasksSliceState = {
   tasks: [],
