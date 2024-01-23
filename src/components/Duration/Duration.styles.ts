@@ -1,7 +1,6 @@
 import styled from "@emotion/styled";
 import { css } from "@emotion/react";
 import { Chip, IconButton, TextField } from "@mui/material";
-import { getCategoryAttributes } from "@/utils";
 
 export const Container = styled.div`
   display: flex;
@@ -37,12 +36,12 @@ export const Time = styled.div`
   }
 `;
 
-export const Category = styled(Chip)<{ duration: number }>`
+export const Category = styled(Chip)<{ backgroundColor: string }>`
   width: 70px;
   color: white;
   font-weight: bold;
-  ${({ duration }) => css`
-    background-color: ${getCategoryAttributes(duration).color};
+  ${({ backgroundColor }) => css`
+    background-color: ${backgroundColor};
   `}
 `;
 

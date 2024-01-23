@@ -2,7 +2,7 @@
 
 import PreloadIcon from "@mui/icons-material/DownloadDone";
 import AddIcon from "@mui/icons-material/Add";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import {
   preload,
   selectTasks,
@@ -14,22 +14,27 @@ import {
   start,
   stop,
 } from "@/lib/redux";
-import { Duration, Task } from "@/types/tasks";
+import { Duration, Filter, Task } from "@/types/tasks";
 import {
   ActionButton,
   Actions,
   Content,
   DisplayMessage,
+  FilterOptions,
+  Option,
   List,
 } from "./TaskList.styles";
 import TaskItem from "../TaskItem";
 import { v4 as uuidv4 } from "uuid";
+import { CategoryAttributes } from "@/constants";
+import { getCategoryAttributes } from "@/utils";
 
 const NUMBER_OF_TASKS = 50;
 
 const TaskList = () => {
   const dispatch = useDispatch();
   const tasks: Task[] = useSelector(selectTasks);
+  const [filter, setFilter] = useState(Filter.All);
 
   const byCreationDate = (taskA: Task, taskB: Task) =>
     taskB.creationDate - taskA.creationDate;
@@ -89,18 +94,44 @@ const TaskList = () => {
       </Actions>
       <Content>
         {sortedTasks.length ? (
-          <List>
-            {sortedTasks.map((task) => (
-              <TaskItem
-                key={task.id}
-                task={task}
-                onUpdate={updateTask}
-                onDelete={deleteTask}
-                onStart={startTask}
-                onStop={stopTask}
-              />
-            ))}
-          </List>
+          <>
+            <FilterOptions>
+              {Object.entries(CategoryAttributes).map(([key, option]) => (
+                <Option
+                  key={key}
+                  size="small"
+                  label={option.label}
+                  isSelected={option.label === filter}
+                  backgroundColor={option.color}
+                  onClick={() =>
+                    setFilter(Filter[option.label as keyof typeof Filter])
+                  }
+                />
+              ))}
+            </FilterOptions>
+            <List>
+              {sortedTasks
+                .map((task) => ({
+                  task,
+                  category: getCategoryAttributes(task.durationInMilliseconds),
+                }))
+                .filter(
+                  ({ category }) =>
+                    filter === "All" || category.label === filter
+                )
+                .map(({ task, category }) => (
+                  <TaskItem
+                    key={task.id}
+                    task={task}
+                    category={category}
+                    onUpdate={updateTask}
+                    onDelete={deleteTask}
+                    onStart={startTask}
+                    onStop={stopTask}
+                  />
+                ))}
+            </List>
+          </>
         ) : (
           <DisplayMessage>
             No tasks created yet. Start by adding a new task!

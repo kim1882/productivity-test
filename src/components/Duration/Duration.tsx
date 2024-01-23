@@ -3,7 +3,6 @@ import {
   formatToHoursMinutes,
   formatToHoursMinutesSeconds,
   minutesToMillis,
-  getCategoryAttributes,
 } from "@/utils";
 import {
   Category,
@@ -24,6 +23,7 @@ const MAX_DURATION_MINUTES = 120;
 interface IDuration {
   isActive: boolean;
   isCompleted: boolean;
+  category: { label: string; color: string };
   elapsedTime: number;
   totalTime: number;
   onUpdateDuration: (newDurationInMillis: number) => void;
@@ -32,6 +32,7 @@ interface IDuration {
 const Duration = ({
   isActive,
   isCompleted,
+  category,
   elapsedTime,
   totalTime,
   onUpdateDuration,
@@ -71,8 +72,8 @@ const Duration = ({
         )}
         <Category
           size="small"
-          duration={totalTime}
-          label={getCategoryAttributes(totalTime).label}
+          label={category.label}
+          backgroundColor={category.color}
         />
       </Container>
       <Dialog open={showEditModal} onClose={() => setShowEditModal(false)}>

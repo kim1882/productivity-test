@@ -12,3 +12,10 @@ export interface Task {
   durationInMilliseconds: Duration | number;
   elapsedTimeInMilliseconds: number;
 }
+
+export enum Filter {
+  All = "All",
+  Short = "Short",
+  Medium = "Medium",
+  Long = "Long",
+}

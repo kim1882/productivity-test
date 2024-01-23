@@ -18,13 +18,21 @@ import { useEffect, useState } from "react";
 
 interface ITaskItem {
   task: Task;
+  category: { label: string; color: string };
   onUpdate: (modifiedTask: Task) => void;
   onDelete: (taskId: string) => void;
   onStart: (taskId: string) => void;
   onStop: (taskId: string, elapsedMillis: number) => void;
 }
 
-const TaskItem = ({ task, onUpdate, onDelete, onStart, onStop }: ITaskItem) => {
+const TaskItem = ({
+  task,
+  category,
+  onUpdate,
+  onDelete,
+  onStart,
+  onStop,
+}: ITaskItem) => {
   let timer: NodeJS.Timeout;
   const {
     id,
@@ -118,6 +126,7 @@ const TaskItem = ({ task, onUpdate, onDelete, onStart, onStop }: ITaskItem) => {
           isActive={isActive}
           isCompleted={isCompleted}
           elapsedTime={elapsedTime}
+          category={category}
           totalTime={durationInMilliseconds}
           onUpdateDuration={(newDurationInMillis: number) =>
             updateTask("durationInMilliseconds", newDurationInMillis)
