@@ -20,14 +20,12 @@ import {
   Actions,
   Content,
   DisplayMessage,
-  FilterOptions,
-  Option,
   List,
 } from "./TaskList.styles";
 import TaskItem from "../TaskItem";
 import { v4 as uuidv4 } from "uuid";
-import { CategoryAttributes } from "@/constants";
 import { getCategoryAttributes } from "@/utils";
+import DurationFilter from "../DurationFilter";
 
 const NUMBER_OF_TASKS = 50;
 
@@ -95,20 +93,7 @@ const TaskList = () => {
       <Content>
         {sortedTasks.length ? (
           <>
-            <FilterOptions>
-              {Object.entries(CategoryAttributes).map(([key, option]) => (
-                <Option
-                  key={key}
-                  size="small"
-                  label={option.label}
-                  isSelected={option.label === filter}
-                  backgroundColor={option.color}
-                  onClick={() =>
-                    setFilter(Filter[option.label as keyof typeof Filter])
-                  }
-                />
-              ))}
-            </FilterOptions>
+            <DurationFilter filter={filter} setFilter={setFilter} />
             <List>
               {sortedTasks
                 .map((task) => ({
@@ -117,7 +102,7 @@ const TaskList = () => {
                 }))
                 .filter(
                   ({ category }) =>
-                    filter === "All" || category.label === filter
+                    filter === Filter.All || category.label === filter
                 )
                 .map(({ task, category }) => (
                   <TaskItem
