@@ -3,6 +3,7 @@
 import {
   LineChart,
   Line,
+  Legend,
   CartesianGrid,
   XAxis,
   YAxis,
@@ -92,9 +93,16 @@ const Insights = () => {
               stroke={CategoryAttributes[line.duration].color}
             />
           ))}
+          <Legend />
           <CartesianGrid stroke="#ccc" />
           <XAxis dataKey="date" />
-          <YAxis />
+          <YAxis
+            label={{
+              value: "Total completed tasks",
+              angle: -90,
+              position: "center",
+            }}
+          />
         </LineChart>
       </ResponsiveContainer>
     </Content>
